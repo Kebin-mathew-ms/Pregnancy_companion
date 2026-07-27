@@ -1,0 +1,137 @@
+{% include 'admin_home_header.html' %}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary bg-gradient d-flex justify-content-between align-items-center">
+                    <h4 class="text-white mb-0">
+                        <i class="fas fa-female me-2"></i>Registered Patients
+                    </h4>
+                    <div class="d-flex">
+                        <input type="text" id="searchInput" class="form-control form-control-sm" 
+                               placeholder="Search patients...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" id="userCards">
+        {% for user in data['users'] %}
+        <div class="col-xl-4 col-lg-6 mb-4 user-card">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Patient #{{ user.Users_id }}</h6>
+                        <span class="badge bg-info">Ward {{ user.Ward_name }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar-lg mx-auto">
+                            <i class="fas fa-user-circle fa-4x text-primary"></i>
+                        </div>
+                        <h5 class="mt-2 mb-0">{{ user.Full_Name }}</h5>
+                        <span class="text-muted">Age: {{ user.Age }} years</span>
+                    </div>
+
+                    <div class="medical-info">
+                        <div class="info-section mb-3">
+                            <h6 class="text-primary mb-2">
+                                <i class="fas fa-calendar-alt me-2"></i>LMP Date
+                            </h6>
+                            <p class="mb-0">{{ user.LMP_date if user.LMP_date else 'Not recorded' }}</p>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="medical-item">
+                                    <span class="label">
+                                        <i class="fas fa-tint text-danger"></i>
+                                        Blood Group
+                                    </span>
+                                    <span class="value">{{ user.Blood_Group or 'N/A' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="medical-item">
+                                    <span class="label">
+                                        <i class="fas fa-heartbeat text-danger"></i>
+                                        BP
+                                    </span>
+                                    <span class="value">{{ user.Blood_Pressure or 'N/A' }}</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="medical-item">
+                                    <span class="label">
+                                        <i class="fas fa-chart-line text-primary"></i>
+                                        Thyroid Levels
+                                    </span>
+                                    <span class="value">{{ user.Thyroid_Levels or 'Not recorded' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="card-footer bg-light">
+                    <button class="btn btn-sm btn-outline-primary w-100">
+                        <i class="fas fa-file-medical me-2"></i>View Medical History
+                    </button>
+                </div> -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.avatar-lg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+.medical-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+.medical-item {
+    background: white;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.medical-item .label {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+.medical-item .value {
+    font-weight: 500;
+    color: #2c3e50;
+}
+.medical-item i {
+    margin-right: 5px;
+}
+.card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.2s;
+}
+</style>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.getElementsByClassName('user-card');
+
+    Array.from(cards).forEach(card => {
+        let text = card.textContent.toLowerCase();
+        card.style.display = text.includes(filter) ? '' : 'none';
+    });
+});
+</script>
+
+{% include 'footer.html' %}

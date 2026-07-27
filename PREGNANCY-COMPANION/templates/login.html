@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>MomCare</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="static/img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/static/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="static/lib/tempusdominus/static/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Topbar Start -->
+    
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="fas fa-baby me-3"></i>MomCare</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="/" class="nav-item nav-link active">Home</a>
+                <!-- <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="service.html" class="nav-item nav-link">Service</a> -->
+                <!-- <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu rounded-0 rounded-bottom m-0">
+                        <a href="feature.html" class="dropdown-item">Feature</a>
+                        <a href="team.html" class="dropdown-item">Our Doctor</a>
+                        <a href="appointment.html" class="dropdown-item">Appointment</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        <a href="404.html" class="dropdown-item">404 Page</a>
+                    </div>
+                </div> -->
+                <!-- <a href="contact.html" class="nav-item nav-link">Contact</a> -->
+            </div>
+            <a href="/login" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Login<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid header bg-primary p-0 mb-5">
+        <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+            <div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s">
+                
+                <style>
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                        font-family: 'Inter', sans-serif;
+                    }
+            
+                    
+            
+                    .login-card {
+                        background: white;
+                        border-radius: 20px;
+                        padding: 3rem 2rem;
+                        width: 100%;
+                        max-width: 420px;
+                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+                    }
+            
+                    .brand {
+                        text-align: center;
+                        margin-bottom: 2rem;
+                    }
+            
+                    .brand-logo {
+                        width: 50px;
+                        height: 50px;
+                        background: #000;
+                        border-radius: 50%;
+                        margin: 0 auto 1rem;
+                    }
+            
+                    .brand h1 {
+                        font-size: 1.75rem;
+                        color: #1a1a1a;
+                        margin-bottom: 0.5rem;
+                    }
+            
+                    .brand p {
+                        color: #666;
+                        font-size: 0.95rem;
+                    }
+            
+                    .form-group {
+                        margin-bottom: 1.5rem;
+                        position: relative;
+                    }
+            
+                    .form-group label {
+                        display: block;
+                        margin-bottom: 0.5rem;
+                        color: #333;
+                        font-size: 0.9rem;
+                        font-weight: 500;
+                    }
+            
+                    .form-group input {
+                        width: 100%;
+                        padding: 0.8rem 1rem;
+                        border: 2px solid #e1e1e1;
+                        border-radius: 12px;
+                        font-size: 1rem;
+                        transition: all 0.3s ease;
+                    }
+            
+                    .form-group input:focus {
+                        outline: none;
+                        border-color: #000;
+                        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1);
+                    }
+            
+                    .remember-forgot {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 1.5rem;
+                    }
+            
+                    .remember-me {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                    }
+            
+                    .remember-me input[type="checkbox"] {
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 4px;
+                    }
+            
+                    .remember-me label {
+                        color: #666;
+                        font-size: 0.9rem;
+                    }
+            
+                    .forgot-password {
+                        color: #000;
+                        text-decoration: none;
+                        font-size: 0.9rem;
+                        font-weight: 500;
+                    }
+            
+                    .login-btn {
+                        width: 100%;
+                        padding: 1rem;
+                        background: #000;
+                        color: white;
+                        border: none;
+                        border-radius: 12px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+            
+                    .login-btn:hover {
+                        background: #333;
+                        transform: translateY(-2px);
+                    }
+            
+                    .login-btn:active {
+                        transform: translateY(0);
+                    }
+            
+                    .social-login {
+                        margin-top: 2rem;
+                        text-align: center;
+                    }
+            
+                    .social-login p {
+                        color: #666;
+                        font-size: 0.9rem;
+                        margin-bottom: 1rem;
+                        position: relative;
+                    }
+            
+                    .social-login p::before,
+                    .social-login p::after {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        width: 45%;
+                        height: 1px;
+                        background: #e1e1e1;
+                    }
+            
+                    .social-login p::before {
+                        left: 0;
+                    }
+            
+                    .social-login p::after {
+                        right: 0;
+                    }
+            
+                    .social-buttons {
+                        display: flex;
+                        gap: 1rem;
+                        justify-content: center;
+                    }
+            
+                    .social-btn {
+                        width: 50px;
+                        height: 50px;
+                        border: 2px solid #e1e1e1;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    }
+            
+                    .social-btn:hover {
+                        border-color: #000;
+                        background: #f5f5f5;
+                    }
+            
+                    .signup-link {
+                        text-align: center;
+                        margin-top: 1.5rem;
+                    }
+            
+                    .signup-link a {
+                        color: #000;
+                        text-decoration: none;
+                        font-weight: 600;
+                    }
+            
+                    .signup-link a:hover {
+                        text-decoration: underline;
+                    }
+            
+                    .error {
+                        color: #dc3545;
+                        font-size: 0.85rem;
+                        margin-top: 0.5rem;
+                        display: none;
+                    }
+            
+                    @keyframes shake {
+                        0%, 100% { transform: translateX(0); }
+                        20%, 60% { transform: translateX(-5px); }
+                        40%, 80% { transform: translateX(5px); }
+                    }
+            
+                    .shake {
+                        animation: shake 0.5s ease;
+                    }
+                </style>
+                
+                    <div class="login-card">
+                        <div class="brand">
+                            <div class="fas fa-baby me-3"></div>
+                            <h1>Welcome back</h1>
+                            <p>Enter your credentials to access your account</p>
+                        </div>
+                
+                        <form id="loginForm" method="post">
+                            <div class="form-group">
+                                <label for="email">Username</label>
+                                <input 
+                                    type="uname" 
+                                    id="email" 
+                                    name="username"
+                                    placeholder="Enter your username"
+                                    autocomplete="email"
+                                >
+                                <div class="error" id="emailError"></div>
+                            </div>
+                
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                >
+                                <div class="error" id="passwordError"></div>
+                            </div>
+                
+                            
+                
+                            <button type="submit" name="submit" class="login-btn" id="loginButton">
+                                Sign in
+                            </button>
+                        </form>
+                
+                        
+                
+                        
+                    </div>
+                
+
+
+
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                <div class="owl-carousel header-carousel">
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-1.jpg" alt="">
+                        <div class="owl-carousel-text">
+                            <!-- <h1 class="display-1 text-white mb-0">Cardiology</h1> -->
+                        </div>
+                    </div>
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-2.jpg" alt="">
+                        <div class="owl-carousel-text">
+                            <!-- <h1 class="display-1 text-white mb-0">Neurology</h1> -->
+                        </div>
+                    </div>
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-3.jpg" alt="">
+                        <div class="owl-carousel-text">
+                            <!-- <h1 class="display-1 text-white mb-0">Pulmonary</h1> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+{% include 'footer.html'%}

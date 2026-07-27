@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MomCare - Asha Registration</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    
+    <!-- Include all the same header links as in the template -->
+    <link href="static/img/favicon.ico" rel="icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="static/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="static/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="static/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/style.css" rel="stylesheet">
+
+    <style>
+        .login-card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+            margin: 1rem;
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand .fa-user-nurse {
+            color: #13c5dd;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .brand h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group label i {
+            color: #13c5dd;
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #13c5dd;
+            box-shadow: 0 0 0 3px rgba(19, 197, 221, 0.1);
+            background-color: #fff;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #13c5dd 0%, #0056b3 100%);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(19, 197, 221, 0.3);
+        }
+
+        /* Form grid layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Input hover effect */
+        .form-control:hover {
+            border-color: #13c5dd80;
+        }
+
+        /* Placeholder styling */
+        ::placeholder {
+            color: #aab0b6;
+            opacity: 1;
+        }
+
+        /* Error state */
+        .form-control.error {
+            border-color: #dc3545;
+        }
+
+        /* Success state */
+        .form-control.success {
+            border-color: #28a745;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0 wow fadeIn" data-wow-delay="0.1s">
+        <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <h1 class="m-0 text-primary"><i class="fas fa-baby me-3"></i>MomCare</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="/" class="nav-item nav-link">Home</a>
+            </div>
+            <a href="/login" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Login<i class="fa fa-arrow-right ms-3"></i></a>
+        </div>
+    </nav>
+
+    <!-- Header Start -->
+    <div class="container-fluid header bg-primary p-0 mb-5">
+        <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+            <div class="col-lg-6 p-5 wow fadeIn" data-wow-delay="0.1s">
+                <div class="login-card">
+                    <div class="brand">
+                        <div class="fas fa-user-nurse fa-2x mb-3"></div>
+                        <h1>Asha Worker Registration</h1>
+                        <p>Enter your details to create an account</p>
+                    </div>
+
+                    <form method="POST">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i>First Name</label>
+                                <input type="text" name="firstname" class="form-control" required placeholder="Enter first name">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i>Last Name</label>
+                                <input type="text" name="lastname" class="form-control" required placeholder="Enter last name">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-venus-mars"></i>Gender</label>
+                                <select name="gender" required class="form-control">
+                                    <option value="">Select gender</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Male">Male</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i>Place</label>
+                                <input type="text" name="place" class="form-control" required placeholder="Enter place">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i>Email</label>
+                            <input type="email" name="email" class="form-control" required placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-phone"></i>Phone</label>
+                            <input type="tel" name="phone" class="form-control" pattern="[0-9]{10}" required placeholder="Enter phone number">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-map-signs"></i>Ward</label>
+                            <select name="ward_id" required class="form-control">
+                                <option value="">Select Ward</option>
+                                {% for i in data['wards'] %}
+                                <option value="{{i['Ward_id']}}">{{i['Ward_name']}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-user"></i>Username</label>
+                            <input type="text" name="username" class="form-control" required placeholder="Choose username">
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i>Password</label>
+                            <input type="password" name="password" class="form-control" required placeholder="Choose password">
+                        </div>
+                        <button type="submit" name="submit" class="login-btn">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeIn" style="margin-top: -450px;" data-wow-delay="0.5s">
+                <div class="owl-carousel header-carousel">
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-1.jpg" alt="">
+                    </div>
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-2.jpg" alt="">
+                    </div>
+                    <div class="owl-carousel-item position-relative">
+                        <img class="img-fluid" src="static/img/carousel-3.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="static/lib/wow/wow.min.js"></script>
+    <script src="static/lib/easing/easing.min.js"></script>
+    <script src="static/lib/waypoints/waypoints.min.js"></script>
+    <script src="static/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="static/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="static/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="static/js/main.js"></script>
+</body>
+</html>

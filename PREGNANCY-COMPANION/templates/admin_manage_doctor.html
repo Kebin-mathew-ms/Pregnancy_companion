@@ -1,0 +1,153 @@
+{% include 'admin_home_header.html' %}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Add Doctor Form -->
+        <div class="col-12 col-xl-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary bg-gradient">
+                    <h4 class="text-white mb-0">
+                        <i class="fas fa-user-md me-2"></i>Add New Doctor
+                    </h4>
+                </div>
+                <center>
+                    <div class="card-body">
+                        <form method="POST" class="needs-validation" novalidate>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Specialization</label>
+                                    <input type="text" class="form-control" name="specialization" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" name="phone" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Place</label>
+                                    <input type="text" class="form-control" name="place" required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-plus-circle me-2"></i>Add Doctor
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </center>
+            </div>
+        </div>
+
+        <!-- Doctors List -->
+        <div class="col-12 col-xl-8">
+            <div class="row" id="doctorCards">
+                {% for doctor in data['doctors'] %}
+                <div class="col-md-6 mb-4 doctor-card">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="doctor-avatar me-3">
+                                        <i class="fas fa-user-md fa-2x text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="mb-0">Dr. {{ doctor.First_Name }} {{ doctor.Last_Name }}</h5>
+                                        <span class="badge bg-info">{{ doctor.Specialization }}</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-danger btn-sm" onclick="deleteDoctor({{ doctor.Doc_id }})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <div class="doctor-details">
+                                <div class="detail-item">
+                                    <i class="fas fa-envelope text-primary"></i>
+                                    <span>{{ doctor.Email }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-phone text-primary"></i>
+                                    <span>{{ doctor.Phone }}</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="fas fa-map-marker-alt text-primary"></i>
+                                    <span>{{ doctor.Place }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.doctor-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.doctor-details {
+    margin-top: 1rem;
+}
+.detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+.detail-item i {
+    width: 20px;
+    margin-right: 10px;
+}
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+</style>
+
+<script>
+function deleteDoctor(docId) {
+    if (confirm('Are you sure you want to delete this doctor?')) {
+        window.location.href = '/delete_doctor/' + docId;
+    }
+}
+
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+
+{% include 'footer.html' %}

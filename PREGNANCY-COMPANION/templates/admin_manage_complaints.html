@@ -1,0 +1,120 @@
+{% include 'admin_home_header.html' %}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary bg-gradient">
+                    <h4 class="text-white mb-0">
+                        <i class="fas fa-comments me-2"></i>Complaint Management
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>User</th>
+                                    <th>Complaint</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for complaint in data['complaints'] %}
+                                <tr>
+                                    <td>#{{ complaint.Comp_id }}</td>
+                                    <td>{{ complaint.Full_Name }}</td>
+                                    <td>{{ complaint.Complaint_id }}</td>
+                                    <td>{{ complaint.Date or 'Not recorded' }}</td>
+                                    <td>
+                                        {% if complaint.Reply == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% else %}
+                                            <span class="badge bg-success">Replied</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if complaint.Reply == 'pending' %}
+                                            <button class="btn btn-sm btn-primary" 
+                                                    onclick="showReplyModal('{{ complaint.Comp_id }}', '{{ complaint.Complaint_id }}')">
+                                                <i class="fas fa-reply me-1"></i>Reply
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-sm btn-info" 
+                                                    onclick="viewReply('{{ complaint.Reply }}')">
+                                                <i class="fas fa-eye me-1"></i>View Reply
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reply to Complaint</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="POST">
+                <div class="modal-body">
+                    <input type="hidden" id="complaint_id" name="complaint_id">
+                    <div class="mb-3">
+                        <label class="form-label">Complaint</label>
+                        <p id="complaintText" class="form-control-plaintext"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Your Reply</label>
+                        <textarea class="form-control" name="reply" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Send Reply</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View Reply Modal -->
+<div class="modal fade" id="viewReplyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reply Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="replyText"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showReplyModal(complaintId, complaintText) {
+    document.getElementById('complaint_id').value = complaintId;
+    document.getElementById('complaintText').textContent = complaintText;
+    new bootstrap.Modal(document.getElementById('replyModal')).show();
+}
+
+function viewReply(reply) {
+    document.getElementById('replyText').textContent = reply;
+    new bootstrap.Modal(document.getElementById('viewReplyModal')).show();
+}
+</script>
+
+{% include 'footer.html' %}

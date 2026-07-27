@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bbgg"
+    android:padding="7dp"
+    android:orientation="vertical"
+    tools:context=".User_view_internship_details">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:textStyle="bold"
+                android:textColor="#3F60A0"
+                android:textSize="30dp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Internship Detail" />
+
+            <TextView
+                android:id="@+id/tvtitle"
+                android:layout_marginTop="20dp"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="#3F60A0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Title" />
+
+            <TextView
+                android:id="@+id/tvduration"
+                android:layout_marginTop="10dp"
+                android:textColor="#3F60A0"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Duration" />
+
+            <TextView
+                android:id="@+id/tvfees"
+                android:layout_marginTop="10dp"
+                android:textColor="#3F60A0"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fees" />
+
+            <TextView
+                android:id="@+id/tvsyllabus"
+                android:layout_marginTop="10dp"
+                android:textColor="#3F60A0"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="syllabus" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,108 @@
+{% include 'admin_home_header.html' %}
+
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary bg-gradient d-flex justify-content-between align-items-center">
+                    <h4 class="text-white mb-0">
+                        <i class="fas fa-user-nurse me-2"></i>ASHA Workers Management
+                    </h4>
+                    <div class="d-flex">
+                        <input type="text" id="searchInput" class="form-control form-control-sm me-2" 
+                               placeholder="Search ASHA workers...">
+                        <button class="btn btn-light btn-sm">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered" id="ashaWorkersTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Ward</th>
+                                    <th>Gender</th>
+                                    <th>Place</th>
+                                    <th>Contact Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for worker in data['asha_workers'] %}
+                                <tr>
+                                    <td>{{ worker['Asha_id'] }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-sm me-2">
+                                                     
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">{{ worker['First_Name'] }} {{ worker['Last_Name'] }}</h6>
+                                                <small class="text-muted">ID: {{ worker.Login_id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ worker['Ward_name'] }}</td>
+                                    <td><span class="badge bg-info">{{ worker.Gender }}</span></td>
+                                    <td>{{ worker.Place }}</td>
+                                    <td>
+                                        <div>
+                                            <i class="fas fa-envelope text-muted me-1"></i>
+                                            {{ worker.Email }}
+                                        </div>
+                                        <div>
+                                            <i class="fas fa-phone text-muted me-1"></i>
+                                            {{ worker.Phone }}
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar {
+    width: 35px;
+    height: 35px;
+    overflow: hidden;
+}
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
+
+<script>
+document.getElementById('searchInput').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let table = document.getElementById('ashaWorkersTable');
+    let tr = table.getElementsByTagName('tr');
+
+    for (let i = 1; i < tr.length; i++) {
+        let td = tr[i].getElementsByTagName('td');
+        let found = false;
+        for (let j = 0; j < td.length; j++) {
+            if (td[j]) {
+                let txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        tr[i].style.display = found ? '' : 'none';
+    }
+});
+</script>
+
+{% include 'footer.html' %}

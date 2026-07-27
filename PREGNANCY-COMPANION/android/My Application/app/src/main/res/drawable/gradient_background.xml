@@ -1,0 +1,9 @@
+<!-- res/drawable/gradient_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="16dp" /> <!-- Adjust the radius as needed for the desired curvature -->
+    <gradient
+        android:type="linear"
+        android:startColor="#0097B2"
+        android:endColor="#7ED957"
+        android:angle="45" />
+</shape>

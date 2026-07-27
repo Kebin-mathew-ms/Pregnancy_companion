@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Set the outline box stroke color (border color) -->
+        <item name="boxStrokeColor">#3F60A0</item>
+
+        <!-- Set the text hint color -->
+        <item name="hintTextColor">#3F60A0</item>
+    </style>
+
+
+    <style name="ModernButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="android:background">@drawable/modern_button_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:elevation">4dp</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+
+    <style name="BorderlessTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@drawable/gradient_background</item>
+        <item name="boxStrokeWidthFocused">2dp</item> <!-- Set the desired border width -->
+        <item name="hintTextColor">#000</item>
+    </style>
+
+    <style name="BorderlessTextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.FilledBox">
+        <item name="boxBackgroundMode">none</item>
+    </style>
+
+
+
+</resources>

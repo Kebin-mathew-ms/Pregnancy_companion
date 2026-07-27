@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/b"
+    android:gravity="center"
+    android:padding="10dp"
+    tools:context=".MainActivity">
+
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Next"-->
+    <!--        android:layout_gravity="end"-->
+    <!--        android:layout_margin="29dp"-->
+    <!--        android:textColor="#108310"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+
+<!--    <ImageView-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:background="@drawable/lgo"/>-->
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:progressBackgroundTint="@android:color/darker_gray"
+        android:progressTint="#3F60A0" />
+
+    <TextView
+        android:id="@+id/percentageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:text="0%"
+        android:textColor="#3F60A0" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/hh"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/progressBar"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:textSize="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text='"EasySum - Summarize with Ease is a user-friendly mobile app that simplifies the process of summarizing lengthy texts and documents, making content comprehension effortless."'-->
+<!--        android:textColor="#3F60A0" />-->
+
+</LinearLayout>
