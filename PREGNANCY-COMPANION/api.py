@@ -1283,19 +1283,21 @@ import json
 
 # Initialize the Flask application
 
-# Google Gemini API Key
-GOOGLE_API_KEY = 'AIzaSyCaLAxR8KSLoMpLhqjDxxdBgj72uv6ErKw'
+# Google Gemini API Key - Loaded from environment variables, falls back to local config
+GOOGLE_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyCaLAxR8KSLoMpLhqjDxxdBgj72uv6ErKw')
 
-# Configure Google Gemini API
-genai.configure(api_key=GOOGLE_API_KEY)
-
-# Initialize the model
+# Configure Google Gemini API & Initialize Model Gracefully
 model = None
-for m in genai.list_models():
-    if 'generateContent' in m.supported_generation_methods:
-        print(m.name)
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        break
+if GOOGLE_API_KEY:
+    try:
+        genai.configure(api_key=GOOGLE_API_KEY)
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                print("Gemini model selected:", m.name)
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                break
+    except Exception as e:
+        print("Warning: Could not initialize Google Gemini API:", str(e))
 
 # Function to convert text to markdown
 def to_markdown(text):
@@ -1304,15 +1306,21 @@ def to_markdown(text):
 
 # Function to generate response from Google Gemini
 def generate_gemini_response(prompt):
-    context_prompt = (
-        f"You are a friendly AI assistant. Keep responses brief, clear and simple. "
-        f"For greetings like 'hi', 'hello', just respond with a simple greeting. "
-        f"For questions, provide short direct answers focused on pregnancy and maternal health. "
-        f"User Query: {prompt}"
-    )
+    if model is None:
+        return "I'm sorry, the AI chatbot is currently offline. Please configure a valid Gemini API key."
+    try:
+        context_prompt = (
+            f"You are a friendly AI assistant. Keep responses brief, clear and simple. "
+            f"For greetings like 'hi', 'hello', just respond with a simple greeting. "
+            f"For questions, provide short direct answers focused on pregnancy and maternal health. "
+            f"User Query: {prompt}"
+        )
 
-    response = model.generate_content(context_prompt)
-    return response.text
+        response = model.generate_content(context_prompt)
+        return response.text
+    except Exception as e:
+        print("Error during Gemini response generation:", str(e))
+        return "Sorry, I am unable to generate a response at the moment."
 
 # Function to provide financial advice
 def get_financial_advice(message):
