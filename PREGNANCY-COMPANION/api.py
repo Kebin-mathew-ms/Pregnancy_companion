@@ -806,7 +806,7 @@ def loginn():
 	else:
 		data['status'] = 'failed'
 		
-	return str(data)
+	return jsonify(data)
 
 
 
@@ -833,7 +833,7 @@ def register():
 		insert(q1)
 		data['status'] = 'success'
 	data['method']="register"
-	return str(data)
+	return jsonify(data)
 
 
 

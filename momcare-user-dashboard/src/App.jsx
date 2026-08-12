@@ -32,12 +32,37 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Load user from localStorage on startup
+  // Load user from localStorage on startup and refresh from server
   useEffect(() => {
     const cachedUser = localStorage.getItem('momcare_user')
     if (cachedUser) {
       try {
-        setUser(JSON.parse(cachedUser))
+        const parsedUser = JSON.parse(cachedUser)
+        setUser(parsedUser)
+        
+        // Fetch fresh profile from backend
+        if (parsedUser.user_id) {
+          fetch(`/api/view_profile?user_id=${parsedUser.user_id}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data.status === 'success' && data.data && data.data.length > 0) {
+                const dbUser = data.data[0]
+                const updatedUser = {
+                  ...parsedUser,
+                  Full_Name: dbUser.Full_Name,
+                  Age: dbUser.Age,
+                  Ward_id: dbUser.Ward_id,
+                  LMP_date: dbUser.LMP_date,
+                  Blood_Group: dbUser.Blood_Group,
+                  Blood_Pressure: dbUser.Blood_Pressure,
+                  Thyroid_Levels: dbUser.Thyroid_Levels
+                }
+                setUser(updatedUser)
+                localStorage.setItem('momcare_user', JSON.stringify(updatedUser))
+              }
+            })
+            .catch(err => console.error('Error refreshing profile:', err))
+        }
       } catch (e) {
         console.error('Error parsing cached user:', e)
         localStorage.removeItem('momcare_user')
