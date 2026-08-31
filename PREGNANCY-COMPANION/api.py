@@ -1993,3 +1993,176 @@ def get_ward():
         return jsonify({"status": "success", "data": wards,"method":'getward'})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# ─────────────────────────────────────────────
+#  ADMIN API ENDPOINTS
+# ─────────────────────────────────────────────
+
+@api.route('/api/admin/view_users', methods=['GET'])
+def admin_view_users():
+    try:
+        q = """SELECT u.*, w.Ward_name
+               FROM users u
+               LEFT JOIN ward w ON u.Ward_id = w.Ward_id
+               ORDER BY u.Users_id DESC"""
+        users = select(q)
+        return jsonify({"status": "success", "data": users})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/add_ward', methods=['GET'])
+def admin_add_ward():
+    try:
+        ward_name = request.args.get('ward_name')
+        if not ward_name:
+            return jsonify({"status": "error", "message": "Ward name is required"}), 400
+        q = "INSERT INTO ward (Ward_name) VALUES ('%s')" % (ward_name)
+        insert(q)
+        return jsonify({"status": "success", "message": "Ward added successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/delete_ward', methods=['GET'])
+def admin_delete_ward():
+    try:
+        ward_id = request.args.get('ward_id')
+        if not ward_id:
+            return jsonify({"status": "error", "message": "Ward ID is required"}), 400
+        q = "DELETE FROM ward WHERE Ward_id = '%s'" % (ward_id)
+        delete(q)
+        return jsonify({"status": "success", "message": "Ward deleted successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/add_doctor', methods=['GET'])
+def admin_add_doctor():
+    try:
+        first_name = request.args.get('first_name')
+        last_name = request.args.get('last_name')
+        place = request.args.get('place')
+        phone = request.args.get('phone')
+        email = request.args.get('email')
+        specialization = request.args.get('specialization')
+        if not all([first_name, last_name, place, phone, email, specialization]):
+            return jsonify({"status": "error", "message": "All fields are required"}), 400
+        q = """INSERT INTO doctor (First_Name, Last_Name, Place, Phone, Email, Specialization)
+               VALUES ('%s','%s','%s','%s','%s','%s')""" % (
+            first_name, last_name, place, phone, email, specialization)
+        insert(q)
+        return jsonify({"status": "success", "message": "Doctor added successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/delete_doctor', methods=['GET'])
+def admin_delete_doctor():
+    try:
+        doc_id = request.args.get('doc_id')
+        if not doc_id:
+            return jsonify({"status": "error", "message": "Doctor ID is required"}), 400
+        q = "DELETE FROM doctor WHERE Doc_id = '%s'" % (doc_id)
+        delete(q)
+        return jsonify({"status": "success", "message": "Doctor deleted successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/add_govt_post', methods=['GET'])
+def admin_add_govt_post():
+    try:
+        post_name = request.args.get('post_name')
+        description = request.args.get('description')
+        links = request.args.get('links', '')
+        if not all([post_name, description]):
+            return jsonify({"status": "error", "message": "Post name and description are required"}), 400
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        q = """INSERT INTO kerala_government_posts (Post_name, Description, Links, File, Datetime)
+               VALUES ('%s','%s','%s', null, '%s')""" % (post_name, description, links, current_time)
+        insert(q)
+        return jsonify({"status": "success", "message": "Government post added successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/delete_govt_post', methods=['GET'])
+def admin_delete_govt_post():
+    try:
+        post_id = request.args.get('post_id')
+        if not post_id:
+            return jsonify({"status": "error", "message": "Post ID is required"}), 400
+        q = "DELETE FROM kerala_government_posts WHERE Kg_id = '%s'" % (post_id)
+        delete(q)
+        return jsonify({"status": "success", "message": "Post deleted successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/all_complaints', methods=['GET'])
+def admin_all_complaints():
+    try:
+        q = """SELECT c.*, u.Full_Name
+               FROM complaints c
+               LEFT JOIN users u ON c.User_id = u.Users_id
+               ORDER BY c.Date DESC"""
+        complaints = select(q)
+        return jsonify({"status": "success", "data": complaints})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/admin/reply_complaint', methods=['GET'])
+def admin_reply_complaint():
+    try:
+        complaint_id = request.args.get('complaint_id')
+        reply = request.args.get('reply')
+        if not complaint_id or not reply:
+            return jsonify({"status": "error", "message": "Complaint ID and reply are required"}), 400
+        q = "UPDATE complaints SET Reply = '%s' WHERE Comp_id = '%s'" % (reply, complaint_id)
+        update(q)
+        return jsonify({"status": "success", "message": "Reply submitted successfully"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# ─────────────────────────────────────────────
+#  ASHA WORKER API ENDPOINTS
+# ─────────────────────────────────────────────
+
+@api.route('/api/asha/profile', methods=['GET'])
+def asha_profile():
+    try:
+        login_id = request.args.get('login_id')
+        if not login_id:
+            return jsonify({"status": "error", "message": "Login ID is required"}), 400
+        q = """SELECT a.*, w.Ward_name
+               FROM asha_worker a
+               LEFT JOIN ward w ON a.Ward_id = w.Ward_id
+               WHERE a.Login_id = '%s'""" % (login_id)
+        profile = select(q)
+        if profile:
+            return jsonify({"status": "success", "data": profile[0]})
+        return jsonify({"status": "error", "message": "Profile not found"}), 404
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/asha/view_users', methods=['GET'])
+def asha_view_users():
+    try:
+        login_id = request.args.get('login_id')
+        if not login_id:
+            return jsonify({"status": "error", "message": "Login ID is required"}), 400
+        q = """SELECT u.*, w.Ward_name
+               FROM users u
+               INNER JOIN ward w ON u.Ward_id = w.Ward_id
+               INNER JOIN asha_worker a ON w.Ward_id = a.Ward_id
+               WHERE a.Login_id = '%s'""" % (login_id)
+        users = select(q)
+        return jsonify({"status": "success", "data": users})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+

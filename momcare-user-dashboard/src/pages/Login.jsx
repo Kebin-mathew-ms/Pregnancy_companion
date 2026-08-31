@@ -50,11 +50,15 @@ export default function Login({ onLogin }) {
       const data = parsePythonDict(rawText)
 
       if (data && data.status === 'success') {
-        // Collect user details
+        const loginRow = data.login_data?.[0]
+        const utype = loginRow?.utype || 'user'
+
         const userData = {
-          login_id: data.login_data?.[0]?.login_id,
-          user_id: data.user_id,
+          login_id: loginRow?.login_id,
           uname: username,
+          utype: utype,
+          // user-specific fields (populated for 'user' type)
+          user_id: data.user_id,
           Full_Name: data.user_data?.[0]?.Full_Name || username,
           Age: data.user_data?.[0]?.Age,
           Ward_id: data.user_data?.[0]?.Ward_id,
@@ -65,7 +69,15 @@ export default function Login({ onLogin }) {
         }
         
         onLogin(userData)
-        navigate('/')
+
+        // Role-based routing
+        if (utype === 'admin') {
+          navigate('/admin')
+        } else if (utype === 'asha') {
+          navigate('/asha')
+        } else {
+          navigate('/')
+        }
       } else {
         setError('Invalid username or password')
       }
@@ -76,6 +88,7 @@ export default function Login({ onLogin }) {
       setSubmitting(false)
     }
   }
+
 
   return (
     <div style={{

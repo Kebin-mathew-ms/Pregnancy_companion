@@ -301,10 +301,11 @@ def run_seed():
 
     # 2. Login
     logins = [
-        (1, 'admin', 'admin', 'user'),
+        (1, 'anju', 'anju', 'user'),
         (2, 'shel', 'shel', 'asha'),
         (3, 'doctor1', 'doctor1', 'doctor'),
-        (4, 'user2', 'user2', 'user')
+        (4, 'user2', 'user2', 'user'),
+        (5, 'admin', 'admin', 'admin')
     ]
     cur.executemany("INSERT INTO login (login_id, uname, psd, utype) VALUES (%s, %s, %s, %s)", logins)
 

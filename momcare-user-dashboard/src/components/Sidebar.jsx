@@ -15,13 +15,14 @@ export default function Sidebar({ user, onLogout }) {
   const navigate = useNavigate()
 
   const navItems = [
-    { to: '/', name: 'Dashboard', icon: Home },
-    { to: '/profile', name: 'Maternal Profile', icon: User },
-    { to: '/growth', name: 'Baby Growth', icon: Activity },
-    { to: '/diet-timeline', name: 'Diet & Timeline', icon: Calendar },
-    { to: '/appointments', name: 'Appointments & Vaccines', icon: Clock },
-    { to: '/chat', name: 'Chat & Help', icon: MessageSquare }
+    { to: '/dashboard',        name: 'Dashboard',            icon: Home, end: true },
+    { to: '/profile',          name: 'Maternal Profile',     icon: User },
+    { to: '/growth',           name: 'Baby Growth',          icon: Activity },
+    { to: '/diet-timeline',    name: 'Diet & Timeline',      icon: Calendar },
+    { to: '/appointments',     name: 'Appointments & Vaccines', icon: Clock },
+    { to: '/chat',             name: 'Chat & Help',          icon: MessageSquare }
   ]
+
 
   const handleLogout = () => {
     onLogout()
@@ -87,6 +88,7 @@ export default function Sidebar({ user, onLogout }) {
             <NavLink
               key={item.to}
               to={item.to}
+              end={item.end}
               style={({ isActive }) => ({
                 display: 'flex',
                 alignItems: 'center',

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom'
-import Sidebar from './components/Sidebar'
 
-// Page Placeholders (to be implemented)
+// Sidebars
+import Sidebar from './components/Sidebar'
+import AdminSidebar from './components/AdminSidebar'
+import AshaSidebar from './components/AshaSidebar'
+
+// User pages
 import Login from './pages/Login'
 import Register from './pages/Register'
 import DashboardOverview from './pages/DashboardOverview'
@@ -12,40 +16,92 @@ import DietAndTimeline from './pages/DietAndTimeline'
 import AppointmentsAndMeds from './pages/AppointmentsAndMeds'
 import ChatAndHelp from './pages/ChatAndHelp'
 
-// Layout component wrapping dashboard pages
-function DashboardLayout({ user, onLogout }) {
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminManageWards from './pages/admin/AdminManageWards'
+import AdminViewAshaWorkers from './pages/admin/AdminViewAshaWorkers'
+import AdminManageDoctors from './pages/admin/AdminManageDoctors'
+import AdminViewUsers from './pages/admin/AdminViewUsers'
+import AdminManagePosts from './pages/admin/AdminManagePosts'
+import AdminManageComplaints from './pages/admin/AdminManageComplaints'
 
+// ASHA Worker pages
+import AshaHome from './pages/asha/AshaHome'
+import AshaProfile from './pages/asha/AshaProfile'
+import AshaViewUsers from './pages/asha/AshaViewUsers'
+
+// ─── Layout: Regular User ───────────────────────────────
+function DashboardLayout({ user, onLogout }) {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.utype === 'admin') return <Navigate to="/admin" replace />
+  if (user.utype === 'asha') return <Navigate to="/asha" replace />
   return (
     <div className="dashboard-container">
       <Sidebar user={user} onLogout={onLogout} />
-      <main className="main-content">
-        <Outlet />
-      </main>
+      <main className="main-content"><Outlet /></main>
     </div>
   )
+}
+
+// ─── Layout: Admin ──────────────────────────────────────
+function AdminLayout({ user, onLogout }) {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.utype !== 'admin') return <Navigate to="/" replace />
+  return (
+    <div className="dashboard-container">
+      <AdminSidebar user={user} onLogout={onLogout} />
+      <main className="main-content"><Outlet /></main>
+    </div>
+  )
+}
+
+// ─── Layout: ASHA Worker ────────────────────────────────
+function AshaLayout({ user, onLogout }) {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.utype !== 'asha') return <Navigate to="/" replace />
+  return (
+    <div className="dashboard-container">
+      <AshaSidebar user={user} onLogout={onLogout} />
+      <main className="main-content"><Outlet /></main>
+    </div>
+  )
+}
+
+// ─── Root Redirect based on utype ───────────────────────
+function RootRedirect({ user }) {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.utype === 'admin') return <Navigate to="/admin" replace />
+  if (user.utype === 'asha') return <Navigate to="/asha" replace />
+  return <Navigate to="/dashboard" replace />
+}
+
+// ─── Login redirect by role ────────────────────────────
+function LoginRedirect({ user, onLogin }) {
+  if (user) {
+    if (user.utype === 'admin') return <Navigate to="/admin" replace />
+    if (user.utype === 'asha') return <Navigate to="/asha" replace />
+    return <Navigate to="/dashboard" replace />
+  }
+  return <Login onLogin={onLogin} />
 }
 
 export default function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Load user from localStorage on startup and refresh from server
   useEffect(() => {
     const cachedUser = localStorage.getItem('momcare_user')
     if (cachedUser) {
       try {
         const parsedUser = JSON.parse(cachedUser)
         setUser(parsedUser)
-        
-        // Fetch fresh profile from backend
-        if (parsedUser.user_id) {
+
+        // Only refresh profile for regular users
+        if (parsedUser.utype === 'user' && parsedUser.user_id) {
           fetch(`/api/view_profile?user_id=${parsedUser.user_id}`)
             .then(res => res.json())
             .then(data => {
-              if (data.status === 'success' && data.data && data.data.length > 0) {
+              if (data.status === 'success' && data.data?.length > 0) {
                 const dbUser = data.data[0]
                 const updatedUser = {
                   ...parsedUser,
@@ -83,18 +139,8 @@ export default function App() {
 
   if (loading) {
     return (
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-        fontFamily: 'Outfit, sans-serif'
-      }}>
-        <div style={{
-          fontSize: '18px',
-          fontWeight: 600,
-          color: 'var(--text-secondary)'
-        }}>Loading MomCare...</div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'Outfit, sans-serif' }}>
+        <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--text-secondary)' }}>Loading MomCare...</div>
       </div>
     )
   }
@@ -102,19 +148,14 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Auth Routes */}
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/" replace /> : <Login onLogin={handleLogin} />} 
-        />
-        <Route 
-          path="/register" 
-          element={user ? <Navigate to="/" replace /> : <Register />} 
-        />
+        {/* ── Auth ── */}
+        <Route path="/login" element={<LoginRedirect user={user} onLogin={handleLogin} />} />
+        <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
+        <Route path="/" element={<RootRedirect user={user} />} />
 
-        {/* Dashboard Pages */}
+        {/* ── Regular User Dashboard ── */}
         <Route element={<DashboardLayout user={user} onLogout={handleLogout} />}>
-          <Route path="/" element={<DashboardOverview user={user} />} />
+          <Route path="/dashboard" element={<DashboardOverview user={user} />} />
           <Route path="/profile" element={<MaternalProfile user={user} onProfileUpdate={handleLogin} />} />
           <Route path="/growth" element={<BabyGrowth user={user} />} />
           <Route path="/diet-timeline" element={<DietAndTimeline user={user} />} />
@@ -122,7 +163,25 @@ export default function App() {
           <Route path="/chat" element={<ChatAndHelp user={user} />} />
         </Route>
 
-        {/* Fallback Route */}
+        {/* ── Admin Dashboard ── */}
+        <Route element={<AdminLayout user={user} onLogout={handleLogout} />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminViewUsers />} />
+          <Route path="/admin/asha" element={<AdminViewAshaWorkers />} />
+          <Route path="/admin/doctors" element={<AdminManageDoctors />} />
+          <Route path="/admin/wards" element={<AdminManageWards />} />
+          <Route path="/admin/posts" element={<AdminManagePosts />} />
+          <Route path="/admin/complaints" element={<AdminManageComplaints />} />
+        </Route>
+
+        {/* ── ASHA Worker Dashboard ── */}
+        <Route element={<AshaLayout user={user} onLogout={handleLogout} />}>
+          <Route path="/asha" element={<AshaHome user={user} />} />
+          <Route path="/asha/profile" element={<AshaProfile user={user} />} />
+          <Route path="/asha/users" element={<AshaViewUsers user={user} />} />
+        </Route>
+
+        {/* ── Fallback ── */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
