@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { MessageSquare, Send, User, Search, CheckCircle, Clock } from 'lucide-react'
+import { MessageSquare, Send, Search, CheckCircle, Clock } from 'lucide-react'
 
 const accent = 'hsl(160, 65%, 38%)'
 const accentLight = 'hsl(160, 65%, 92%)'
@@ -22,9 +22,9 @@ export default function AshaChat({ user }) {
 
   // 1. Fetch assigned patients
   useEffect(() => {
-    if (!user?.login_id) return
+    const ashaLid = user?.login_id || user?.Login_id || 2
     setLoadingPatients(true)
-    fetch(`/api/asha/view_users?login_id=${user.login_id}`)
+    fetch(`/api/asha/view_users?login_id=${ashaLid}`)
       .then(r => r.json())
       .then(d => {
         const list = d.data || []
@@ -46,12 +46,13 @@ export default function AshaChat({ user }) {
 
   // 2. Fetch chat history for selected patient
   const fetchChatHistory = () => {
-    if (!user?.login_id || !selectedPatient) return
+    const ashaLid = user?.login_id || user?.Login_id || 2
+    if (!selectedPatient) return
     const targetLid = selectedPatient.Login_id || selectedPatient.login_id
     if (!targetLid) return
 
     setLoadingMessages(true)
-    fetch(`/api/chatdetail?sender_id=${user.login_id}&receiver_id=${targetLid}`)
+    fetch(`/api/chatdetail?sender_id=${ashaLid}&receiver_id=${targetLid}`)
       .then(r => r.json())
       .then(d => {
         const msgs = d.data || []
@@ -74,7 +75,8 @@ export default function AshaChat({ user }) {
   // 3. Send message
   const handleSendMessage = async (e) => {
     e.preventDefault()
-    if (!newMessage.trim() || !selectedPatient || !user?.login_id || sending) return
+    const ashaLid = user?.login_id || user?.Login_id || 2
+    if (!newMessage.trim() || !selectedPatient || sending) return
 
     const targetLid = selectedPatient.Login_id || selectedPatient.login_id
     if (!targetLid) return
@@ -84,7 +86,7 @@ export default function AshaChat({ user }) {
     setSending(true)
 
     try {
-      const res = await fetch(`/api/chat?sender_id=${user.login_id}&receiver_id=${targetLid}&details=${encodeURIComponent(textToSend)}`)
+      const res = await fetch(`/api/chat?sender_id=${ashaLid}&receiver_id=${targetLid}&details=${encodeURIComponent(textToSend)}`)
       const data = await res.json()
       if (data.status === 'success') {
         fetchChatHistory()
@@ -101,7 +103,7 @@ export default function AshaChat({ user }) {
   )
 
   return (
-    <div style={{ padding: '30px', display: 'flex', flexDirection: 'column', gap: '20px', fontFamily: 'Outfit, sans-serif', height: 'calc(100vh - 40px)' }}>
+    <div style={{ padding: '30px', display: 'flex', flexDirection: 'column', gap: '20px', fontFamily: 'Outfit, sans-serif', height: 'calc(100vh - 100px)', minHeight: '600px' }}>
       
       {/* Header */}
       <div>
@@ -114,9 +116,10 @@ export default function AshaChat({ user }) {
       {/* Chat Container */}
       <div className="glass" style={{
         flex: 1,
+        minHeight: 0,
         borderRadius: '24px',
         display: 'grid',
-        gridTemplateColumns: '320px 1fr',
+        gridTemplateColumns: '300px 1fr',
         overflow: 'hidden',
         border: '1px solid var(--border-glass)'
       }}>
@@ -126,10 +129,16 @@ export default function AshaChat({ user }) {
           borderRight: '1px solid var(--border)',
           display: 'flex',
           flexDirection: 'column',
-          background: 'rgba(255, 255, 255, 0.4)'
+          background: 'rgba(255, 255, 255, 0.5)',
+          minHeight: 0,
+          maxHeight: '100%',
+          overflow: 'hidden'
         }}>
-          {/* Search */}
-          <div style={{ padding: '16px', borderBottom: '1px solid var(--border)' }}>
+          {/* Search Header */}
+          <div style={{ padding: '16px', borderBottom: '1px solid var(--border)', background: 'rgba(255,255,255,0.7)' }}>
+            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '10px' }}>
+              ASSIGNED PATIENTS ({patients.length})
+            </div>
             <div style={{ position: 'relative' }}>
               <Search size={16} color="var(--text-secondary)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
               <input
@@ -142,8 +151,8 @@ export default function AshaChat({ user }) {
             </div>
           </div>
 
-          {/* List */}
-          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+          {/* Patient Cards List */}
+          <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
             {loadingPatients ? (
               <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '13px' }}>
                 Loading patients...
@@ -160,14 +169,15 @@ export default function AshaChat({ user }) {
                     key={p.Users_id || p.Login_id}
                     onClick={() => setSelectedPatient(p)}
                     style={{
-                      padding: '16px 20px',
+                      padding: '16px 18px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '12px',
                       background: isSelected ? accentLight : 'transparent',
                       borderLeft: isSelected ? `4px solid ${accent}` : '4px solid transparent',
-                      transition: 'background var(--transition-fast)'
+                      borderBottom: '1px solid rgba(0,0,0,0.04)',
+                      transition: 'all var(--transition-fast)'
                     }}
                   >
                     <div style={{
@@ -186,11 +196,13 @@ export default function AshaChat({ user }) {
                       {p.Full_Name?.[0] || '?'}
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: isSelected ? 700 : 600, fontSize: '14px', color: 'var(--text-primary)' }}>
+                      <div style={{ fontWeight: isSelected ? 800 : 600, fontSize: '14px', color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {p.Full_Name}
                       </div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                        Ward: {p.Ward_name || 'Assigned'}
+                      <div style={{ fontSize: '12px', color: 'var(--text-secondary)', display: 'flex', gap: '8px', marginTop: '2px' }}>
+                        <span>Ward: {p.Ward_name || 'Adoor'}</span>
+                        <span>•</span>
+                        <span>{p.Blood_Group || 'O+'}</span>
                       </div>
                     </div>
                   </div>
@@ -201,17 +213,18 @@ export default function AshaChat({ user }) {
         </div>
 
         {/* Right Column: Chat Window */}
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'rgba(255, 255, 255, 0.6)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0, background: 'rgba(255, 255, 255, 0.6)' }}>
           {selectedPatient ? (
             <>
               {/* Chat Header */}
               <div style={{
-                padding: '18px 24px',
+                padding: '16px 24px',
                 borderBottom: '1px solid var(--border)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                background: 'rgba(255,255,255,0.8)'
+                background: 'rgba(255,255,255,0.85)',
+                flexShrink: 0
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{
@@ -231,7 +244,7 @@ export default function AshaChat({ user }) {
                   <div>
                     <h3 style={{ fontSize: '16px', fontWeight: 800, margin: 0 }}>{selectedPatient.Full_Name}</h3>
                     <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
-                      Age: {selectedPatient.Age || 'N/A'} yrs | Blood Group: {selectedPatient.Blood_Group || 'N/A'}
+                      Age: {selectedPatient.Age || 'N/A'} yrs | Blood Group: {selectedPatient.Blood_Group || 'N/A'} | BP: {selectedPatient.Blood_Pressure || 'Normal'}
                     </span>
                   </div>
                 </div>
@@ -246,7 +259,7 @@ export default function AshaChat({ user }) {
               </div>
 
               {/* Messages Area */}
-              <div style={{ flex: 1, padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ flex: 1, minHeight: 0, padding: '24px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {loadingMessages ? (
                   <div style={{ textAlign: 'center', margin: 'auto', color: 'var(--text-secondary)', fontSize: '14px' }}>
                     Loading conversation...
@@ -259,7 +272,7 @@ export default function AshaChat({ user }) {
                   </div>
                 ) : (
                   messages.map((m, idx) => {
-                    const isMe = String(m.sender_id) === String(user.login_id)
+                    const isMe = String(m.sender_id) === String(user?.login_id || user?.Login_id || 2)
                     return (
                       <div
                         key={idx}
@@ -301,7 +314,8 @@ export default function AshaChat({ user }) {
                   borderTop: '1px solid var(--border)',
                   display: 'flex',
                   gap: '12px',
-                  background: 'rgba(255,255,255,0.9)'
+                  background: 'rgba(255,255,255,0.95)',
+                  flexShrink: 0
                 }}
               >
                 <input
