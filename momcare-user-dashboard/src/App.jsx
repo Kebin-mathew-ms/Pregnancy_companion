@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import Sidebar from './components/Sidebar'
 import AdminSidebar from './components/AdminSidebar'
 import AshaSidebar from './components/AshaSidebar'
+import DoctorSidebar from './components/DoctorSidebar'
 
 // User pages
 import Login from './pages/Login'
@@ -32,11 +33,18 @@ import AshaProfile from './pages/asha/AshaProfile'
 import AshaViewUsers from './pages/asha/AshaViewUsers'
 import AshaChat from './pages/asha/AshaChat'
 
+// Doctor Portal pages
+import DoctorHome from './pages/doctor/DoctorHome'
+import DoctorAppointments from './pages/doctor/DoctorAppointments'
+import DoctorPatients from './pages/doctor/DoctorPatients'
+import DoctorProfile from './pages/doctor/DoctorProfile'
+
 // ─── Layout: Regular User ───────────────────────────────
 function DashboardLayout({ user, onLogout }) {
   if (!user) return <Navigate to="/login" replace />
   if (user.utype === 'admin') return <Navigate to="/admin" replace />
   if (user.utype === 'asha') return <Navigate to="/asha" replace />
+  if (user.utype === 'doctor') return <Navigate to="/doctor" replace />
   return (
     <div className="dashboard-container">
       <Sidebar user={user} onLogout={onLogout} />
@@ -69,11 +77,24 @@ function AshaLayout({ user, onLogout }) {
   )
 }
 
+// ─── Layout: Doctor Portal ─────────────────────────────
+function DoctorLayout({ user, onLogout }) {
+  if (!user) return <Navigate to="/login" replace />
+  if (user.utype !== 'doctor') return <Navigate to="/" replace />
+  return (
+    <div className="dashboard-container">
+      <DoctorSidebar user={user} onLogout={onLogout} />
+      <main className="main-content"><Outlet /></main>
+    </div>
+  )
+}
+
 // ─── Root Redirect based on utype ───────────────────────
 function RootRedirect({ user }) {
   if (!user) return <Navigate to="/login" replace />
   if (user.utype === 'admin') return <Navigate to="/admin" replace />
   if (user.utype === 'asha') return <Navigate to="/asha" replace />
+  if (user.utype === 'doctor') return <Navigate to="/doctor" replace />
   return <Navigate to="/dashboard" replace />
 }
 
@@ -82,6 +103,7 @@ function LoginRedirect({ user, onLogin }) {
   if (user) {
     if (user.utype === 'admin') return <Navigate to="/admin" replace />
     if (user.utype === 'asha') return <Navigate to="/asha" replace />
+    if (user.utype === 'doctor') return <Navigate to="/doctor" replace />
     return <Navigate to="/dashboard" replace />
   }
   return <Login onLogin={onLogin} />
@@ -183,6 +205,14 @@ export default function App() {
           <Route path="/asha/profile" element={<AshaProfile user={user} />} />
           <Route path="/asha/users" element={<AshaViewUsers user={user} />} />
           <Route path="/asha/chat" element={<AshaChat user={user} />} />
+        </Route>
+
+        {/* ── Doctor Portal Dashboard ── */}
+        <Route element={<DoctorLayout user={user} onLogout={handleLogout} />}>
+          <Route path="/doctor" element={<DoctorHome user={user} />} />
+          <Route path="/doctor/appointments" element={<DoctorAppointments user={user} />} />
+          <Route path="/doctor/patients" element={<DoctorPatients user={user} />} />
+          <Route path="/doctor/profile" element={<DoctorProfile user={user} />} />
         </Route>
 
         {/* ── Fallback ── */}

@@ -2167,3 +2167,52 @@ def asha_view_users():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
+
+# ─────────────────────────────────────────────
+#  DOCTOR PORTAL API ENDPOINTS
+# ─────────────────────────────────────────────
+
+@api.route('/api/doctor/profile', methods=['GET'])
+def doctor_profile():
+    try:
+        login_id = request.args.get('login_id')
+        if not login_id:
+            return jsonify({"status": "error", "message": "Login ID is required"}), 400
+        q = "SELECT * FROM doctor WHERE Login_id = '%s'" % (login_id)
+        res = select(q)
+        if res:
+            return jsonify({"status": "success", "data": res[0]})
+        # fallback to doctor table row if unlinked
+        res_all = select("SELECT * FROM doctor LIMIT 1")
+        if res_all:
+            return jsonify({"status": "success", "data": res_all[0]})
+        return jsonify({"status": "error", "message": "Doctor profile not found"}), 404
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@api.route('/api/doctor/appointments', methods=['GET'])
+def doctor_appointments():
+    try:
+        login_id = request.args.get('login_id')
+        # get doc_id
+        doc_res = select("SELECT Doc_id FROM doctor WHERE Login_id = '%s'" % (login_id)) if login_id else []
+        doc_id = doc_res[0]['Doc_id'] if doc_res else None
+
+        if doc_id:
+            q = """SELECT m.*, u.Full_Name, u.Age, u.Blood_Group, u.Blood_Pressure, u.LMP_date
+                   FROM medical_appointments m
+                   LEFT JOIN users u ON m.User_id = u.Users_id
+                   WHERE m.Doc_id = '%s'
+                   ORDER BY m.Next_appointment_date ASC""" % (doc_id)
+        else:
+            q = """SELECT m.*, u.Full_Name, u.Age, u.Blood_Group, u.Blood_Pressure, u.LMP_date
+                   FROM medical_appointments m
+                   LEFT JOIN users u ON m.User_id = u.Users_id
+                   ORDER BY m.Next_appointment_date ASC"""
+        appts = select(q)
+        return jsonify({"status": "success", "data": appts})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
