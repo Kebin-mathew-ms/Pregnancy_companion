@@ -16,7 +16,7 @@ export default function AdminManagePosts() {
     try {
       const res = await fetch('/api/view_posts')
       const data = await res.json()
-      setPosts(data.data || [])
+      setPosts(data.post || data.records || data.data || [])
     } catch (e) { console.error(e) }
     finally { setLoading(false) }
   }

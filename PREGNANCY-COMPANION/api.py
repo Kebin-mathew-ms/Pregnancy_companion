@@ -1379,14 +1379,6 @@ def chatbot():
 
 @api.route('/api/view_posts', methods=['GET'])
 def view_posts():
-    user_id = request.args.get('user_id')
-    
-    if not user_id:
-        return jsonify({
-            "status": "error",
-            "message": "User ID required"
-        }), 400
-
     query = "SELECT * from kerala_government_posts"
                
     post = select(query)
@@ -1394,11 +1386,15 @@ def view_posts():
     if post:
         return jsonify({
             "status": "success",
-            "post": post
+            "post": post,
+            "records": post,
+            "data": post
         })
     return jsonify({
         "status": "success",
-        "records": []
+        "post": [],
+        "records": [],
+        "data": []
     })
 
 @api.route('/api/get_informative_content', methods=['GET'])
