@@ -7,6 +7,7 @@ import {
   Activity, 
   Calendar, 
   Clock, 
+  FileText,
   MessageSquare, 
   LogOut 
 } from 'lucide-react'
@@ -20,6 +21,7 @@ export default function Sidebar({ user, onLogout }) {
     { to: '/growth',           name: 'Baby Growth',          icon: Activity },
     { to: '/diet-timeline',    name: 'Diet & Timeline',      icon: Calendar },
     { to: '/appointments',     name: 'Appointments & Vaccines', icon: Clock },
+    { to: '/schemes',          name: 'Govt Schemes',         icon: FileText },
     { to: '/chat',             name: 'Chat & Help',          icon: MessageSquare }
   ]
 

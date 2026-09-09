@@ -15,6 +15,7 @@ import BabyGrowth from './pages/BabyGrowth'
 import DietAndTimeline from './pages/DietAndTimeline'
 import AppointmentsAndMeds from './pages/AppointmentsAndMeds'
 import ChatAndHelp from './pages/ChatAndHelp'
+import GovtSchemes from './pages/GovtSchemes'
 
 // Admin pages
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -160,6 +161,7 @@ export default function App() {
           <Route path="/growth" element={<BabyGrowth user={user} />} />
           <Route path="/diet-timeline" element={<DietAndTimeline user={user} />} />
           <Route path="/appointments" element={<AppointmentsAndMeds user={user} />} />
+          <Route path="/schemes" element={<GovtSchemes user={user} />} />
           <Route path="/chat" element={<ChatAndHelp user={user} />} />
         </Route>
 

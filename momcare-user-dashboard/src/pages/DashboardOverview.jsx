@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Calendar, Heart, Clock, Activity, Shield, Award } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Calendar, Heart, Clock, Activity, Shield, Award, FileText, ArrowRight, ExternalLink } from 'lucide-react'
 
 export default function DashboardOverview({ user }) {
   const [pregnancyStats, setPregnancyStats] = useState({
@@ -12,6 +13,7 @@ export default function DashboardOverview({ user }) {
   })
   const [recentGrowth, setRecentGrowth] = useState(null)
   const [nextAppointment, setNextAppointment] = useState(null)
+  const [govtPosts, setGovtPosts] = useState([])
 
   useEffect(() => {
     if (user && user.LMP_date) {
@@ -77,6 +79,15 @@ export default function DashboardOverview({ user }) {
         })
         .catch(err => console.error('Error fetching appointments:', err))
     }
+
+    // Fetch Government Schemes / Posts
+    fetch('/api/view_posts')
+      .then(res => res.json())
+      .then(data => {
+        const posts = data.post || data.records || data.data || []
+        setGovtPosts(posts.slice(0, 3)) // top 3 schemes for overview
+      })
+      .catch(err => console.error('Error fetching govt posts:', err))
   }, [user])
 
   return (
@@ -376,6 +387,62 @@ export default function DashboardOverview({ user }) {
         </section>
 
       </div>
+
+      {/* Active Government Schemes Highlights Section */}
+      <section className="glass" style={{ padding: '30px', borderRadius: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <FileText size={22} color="var(--primary)" /> Government Welfare Schemes
+            </h3>
+            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              Official Kerala State and Central Government cash assistance & health benefits.
+            </p>
+          </div>
+          <Link to="/schemes" className="btn btn-outline" style={{ padding: '8px 16px', borderRadius: '10px', fontSize: '13px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            View All Schemes <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        {govtPosts.length > 0 ? (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+            {govtPosts.map(post => (
+              <div key={post.Kg_id || post.Post_name} style={{
+                background: 'rgba(255, 255, 255, 0.6)',
+                padding: '20px',
+                borderRadius: '16px',
+                border: '1px solid var(--border)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                gap: '12px'
+              }}>
+                <div>
+                  <h4 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '6px', color: 'var(--text-primary)' }}>
+                    {post.Post_name}
+                  </h4>
+                  <p style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {post.Description}
+                  </p>
+                </div>
+                {post.Links ? (
+                  <a href={post.Links} target="_blank" rel="noopener noreferrer" style={{
+                    fontSize: '12px', fontWeight: 700, color: 'var(--primary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px'
+                  }}>
+                    Learn More <ExternalLink size={12} />
+                  </a>
+                ) : (
+                  <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>Available via ASHA worker</span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-secondary)', fontSize: '14px' }}>
+            No active government schemes listed.
+          </div>
+        )}
+      </section>
 
     </div>
   )
