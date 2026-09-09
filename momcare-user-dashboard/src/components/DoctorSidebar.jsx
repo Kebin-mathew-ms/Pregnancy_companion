@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, User, Users, Calendar, LogOut, Stethoscope } from 'lucide-react'
+import { Home, User, Users, Calendar, MessageSquare, LogOut, Stethoscope } from 'lucide-react'
 
 export default function DoctorSidebar({ user, onLogout }) {
   const navigate = useNavigate()
@@ -9,6 +9,7 @@ export default function DoctorSidebar({ user, onLogout }) {
     { to: '/doctor',              name: 'Dashboard',         icon: Home,     end: true },
     { to: '/doctor/appointments', name: 'My Appointments',   icon: Calendar },
     { to: '/doctor/patients',     name: 'Patient Directory', icon: Users },
+    { to: '/doctor/chat',         name: 'Patient Chat',      icon: MessageSquare },
     { to: '/doctor/profile',      name: 'My Profile',        icon: User },
   ]
 

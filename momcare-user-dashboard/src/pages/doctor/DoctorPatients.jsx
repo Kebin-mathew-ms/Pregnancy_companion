@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Users, Droplets, Activity, MapPin, Calendar, Search } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Users, Droplets, Activity, MapPin, Calendar, Search, MessageSquare } from 'lucide-react'
 
 const accent = 'hsl(340, 75%, 45%)'
 const accentLight = 'hsl(340, 75%, 93%)'
@@ -86,6 +87,29 @@ export default function DoctorPatients() {
                   <MapPin size={13} /> {p.Ward_name || 'Ward'}
                 </div>
               </div>
+
+              {/* Action Button */}
+              <Link
+                to={`/doctor/chat?user_id=${p.Login_id || p.Users_id}`}
+                style={{
+                  marginTop: '16px',
+                  width: '100%',
+                  padding: '9px',
+                  borderRadius: '10px',
+                  border: `1px solid ${accent}`,
+                  background: accentLight,
+                  color: accent,
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  textDecoration: 'none'
+                }}
+              >
+                <MessageSquare size={15} /> Message Patient
+              </Link>
             </div>
           ))}
         </div>

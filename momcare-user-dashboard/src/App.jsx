@@ -38,6 +38,7 @@ import DoctorHome from './pages/doctor/DoctorHome'
 import DoctorAppointments from './pages/doctor/DoctorAppointments'
 import DoctorPatients from './pages/doctor/DoctorPatients'
 import DoctorProfile from './pages/doctor/DoctorProfile'
+import DoctorChat from './pages/doctor/DoctorChat'
 
 // ─── Layout: Regular User ───────────────────────────────
 function DashboardLayout({ user, onLogout }) {
@@ -212,6 +213,7 @@ export default function App() {
           <Route path="/doctor" element={<DoctorHome user={user} />} />
           <Route path="/doctor/appointments" element={<DoctorAppointments user={user} />} />
           <Route path="/doctor/patients" element={<DoctorPatients user={user} />} />
+          <Route path="/doctor/chat" element={<DoctorChat user={user} />} />
           <Route path="/doctor/profile" element={<DoctorProfile user={user} />} />
         </Route>
 
