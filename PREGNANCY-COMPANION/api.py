@@ -1279,23 +1279,28 @@ from flask import Flask, request, jsonify
 import textwrap
 import google.generativeai as genai
 import json
+from dotenv import load_dotenv
 
+# Load local environment variables from .env
+load_dotenv()
 
-# Initialize the Flask application
-
-# Google Gemini API Key - Loaded from environment variables, falls back to local config
-GOOGLE_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyCaLAxR8KSLoMpLhqjDxxdBgj72uv6ErKw')
+# Google Gemini API Key - Loaded from environment variables / .env
+GOOGLE_API_KEY = os.environ.get('GEMINI_API_KEY')
 
 # Configure Google Gemini API & Initialize Model Gracefully
 model = None
 if GOOGLE_API_KEY:
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                print("Gemini model selected:", m.name)
-                model = genai.GenerativeModel('gemini-1.5-flash')
+        candidate_models = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-1.5-flash']
+        for model_name in candidate_models:
+            try:
+                m = genai.GenerativeModel(model_name)
+                model = m
+                print(f"Gemini model selected: {model_name}")
                 break
+            except Exception:
+                continue
     except Exception as e:
         print("Warning: Could not initialize Google Gemini API:", str(e))
 
