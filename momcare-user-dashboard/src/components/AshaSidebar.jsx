@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, User, Users, LogOut, HeartHandshake } from 'lucide-react'
+import { Home, User, Users, MessageSquare, LogOut, HeartHandshake } from 'lucide-react'
 
 export default function AshaSidebar({ user, onLogout }) {
   const navigate = useNavigate()
@@ -9,6 +9,7 @@ export default function AshaSidebar({ user, onLogout }) {
     { to: '/asha',         name: 'Dashboard',      icon: Home,   end: true },
     { to: '/asha/profile', name: 'My Profile',     icon: User },
     { to: '/asha/users',   name: 'Assigned Users', icon: Users },
+    { to: '/asha/chat',    name: 'Patient Chat',   icon: MessageSquare },
   ]
 
   const handleLogout = () => {

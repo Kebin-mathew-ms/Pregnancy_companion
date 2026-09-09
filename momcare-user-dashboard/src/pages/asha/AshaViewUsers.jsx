@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Users, MapPin, Droplets, Activity, Calendar } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Users, MapPin, Droplets, Activity, Calendar, MessageSquare } from 'lucide-react'
 
 const accent = 'hsl(160, 65%, 38%)'
 const accentLight = 'hsl(160, 65%, 92%)'
@@ -110,7 +111,7 @@ export default function AshaViewUsers({ user }) {
                 )}
 
                 {/* Health indicators */}
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
                   {u.Blood_Group && (
                     <div style={{
                       padding: '5px 10px', borderRadius: '8px', background: 'hsl(352,90%,94%)',
@@ -137,6 +138,29 @@ export default function AshaViewUsers({ user }) {
                     <MapPin size={12} /> {u.Ward_name}
                   </div>
                 </div>
+
+                {/* Message Action Button */}
+                <Link
+                  to={`/asha/chat?user_id=${u.Login_id || u.Users_id}`}
+                  style={{
+                    width: '100%',
+                    padding: '9px',
+                    borderRadius: '10px',
+                    border: `1px solid ${accent}`,
+                    background: accentLight,
+                    color: accent,
+                    fontWeight: 700,
+                    fontSize: '13px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    textDecoration: 'none',
+                    transition: 'all var(--transition-fast)'
+                  }}
+                >
+                  <MessageSquare size={15} /> Message Patient
+                </Link>
               </div>
             )
           })}

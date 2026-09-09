@@ -30,6 +30,7 @@ import AdminManageComplaints from './pages/admin/AdminManageComplaints'
 import AshaHome from './pages/asha/AshaHome'
 import AshaProfile from './pages/asha/AshaProfile'
 import AshaViewUsers from './pages/asha/AshaViewUsers'
+import AshaChat from './pages/asha/AshaChat'
 
 // ─── Layout: Regular User ───────────────────────────────
 function DashboardLayout({ user, onLogout }) {
@@ -181,6 +182,7 @@ export default function App() {
           <Route path="/asha" element={<AshaHome user={user} />} />
           <Route path="/asha/profile" element={<AshaProfile user={user} />} />
           <Route path="/asha/users" element={<AshaViewUsers user={user} />} />
+          <Route path="/asha/chat" element={<AshaChat user={user} />} />
         </Route>
 
         {/* ── Fallback ── */}
