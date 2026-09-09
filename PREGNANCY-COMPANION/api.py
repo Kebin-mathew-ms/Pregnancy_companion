@@ -2100,7 +2100,7 @@ def admin_delete_govt_post():
 @api.route('/api/admin/all_complaints', methods=['GET'])
 def admin_all_complaints():
     try:
-        q = """SELECT c.*, u.Full_Name
+        q = """SELECT c.*, c.Complaint_id as Complaint, u.Full_Name
                FROM complaints c
                LEFT JOIN users u ON c.User_id = u.Users_id
                ORDER BY c.Date DESC"""

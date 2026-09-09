@@ -40,8 +40,8 @@ export default function AdminManageComplaints() {
 
   const toggle = (id) => setExpanded(p => ({ ...p, [id]: !p[id] }))
 
-  const pending = complaints.filter(c => c.Status === 'pending')
-  const replied = complaints.filter(c => c.Status !== 'pending')
+  const pending = complaints.filter(c => !c.Reply || c.Reply === 'pending')
+  const replied = complaints.filter(c => c.Reply && c.Reply !== 'pending')
 
   return (
     <div style={{ padding: '40px' }}>
@@ -77,8 +77,9 @@ export default function AdminManageComplaints() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {complaints.map(c => {
-            const isPending = c.Status === 'pending'
+            const isPending = !c.Reply || c.Reply === 'pending'
             const isOpen = expanded[c.Comp_id]
+            const complaintText = c.Complaint_id || c.Complaint || 'No complaint details'
             return (
               <div key={c.Comp_id} className="glass" style={{ borderRadius: '18px', overflow: 'hidden' }}>
                 {/* Header */}
@@ -106,7 +107,7 @@ export default function AdminManageComplaints() {
                       <div style={{
                         fontSize: '13px', color: 'var(--text-secondary)',
                         whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '400px'
-                      }}>{c.Complaint}</div>
+                      }}>{complaintText}</div>
                     </div>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
@@ -114,7 +115,7 @@ export default function AdminManageComplaints() {
                       padding: '4px 10px', borderRadius: '8px', fontSize: '11px', fontWeight: 700,
                       background: isPending ? 'hsl(45,95%,90%)' : 'hsl(160,65%,92%)',
                       color: isPending ? 'hsl(45,95%,35%)' : 'hsl(160,65%,30%)'
-                    }}>{c.Status}</span>
+                    }}>{isPending ? 'Pending' : 'Replied'}</span>
                     <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{c.Date}</span>
                     {isOpen ? <ChevronUp size={16} color={accent} /> : <ChevronDown size={16} color="var(--text-secondary)" />}
                   </div>
@@ -129,10 +130,10 @@ export default function AdminManageComplaints() {
                       fontSize: '14px', lineHeight: 1.6, marginBottom: '14px', marginTop: '4px'
                     }}>
                       <strong style={{ color: 'var(--text-primary)' }}>Complaint:</strong>
-                      <p style={{ marginTop: '4px', color: 'var(--text-secondary)' }}>{c.Complaint}</p>
+                      <p style={{ marginTop: '4px', color: 'var(--text-secondary)' }}>{complaintText}</p>
                     </div>
 
-                    {c.Reply && (
+                    {c.Reply && c.Reply !== 'pending' && (
                       <div style={{
                         padding: '14px 16px', borderRadius: '12px',
                         background: 'hsl(160,65%,96%)', border: '1px solid hsl(160,65%,80%)',
