@@ -92,13 +92,14 @@ for lid, wid, fn, ln, gen, place, email, phone in asha_data:
 # ── Step 5: Seed Doctors ──
 print("\n[5] Seeding Doctors...")
 doctors_data = [
-    ('Priya',   'Menon',    'Thiruvananthapuram', '9876543210', 'priya@hospital.com',   'Obstetrics & Gynaecology'),
-    ('Rahul',   'Sharma',   'Kochi',              '9876501234', 'rahul@hospital.com',   'Neonatology'),
-    ('Anitha',  'Krishnan', 'Pathanamthitta',     '9845612345', 'anitha@hospital.com',  'Maternal-Fetal Medicine'),
+    (login_map['doctor1'], 'Priya',   'Menon',    'Thiruvananthapuram', '9876543210', 'priya@hospital.com',   'Obstetrics & Gynaecology'),
+    (login_map['doctor2'], 'Rahul',   'Sharma',   'Kochi',              '9876501234', 'rahul@hospital.com',   'Neonatology'),
+    (None,                 'Anitha',  'Krishnan', 'Pathanamthitta',     '9845612345', 'anitha@hospital.com',  'Maternal-Fetal Medicine'),
 ]
 doc_ids = []
-for fn, ln, place, phone, email, spec in doctors_data:
-    did = insert(f"INSERT INTO doctor(First_Name, Last_Name, Place, Phone, Email, Specialization) VALUES('{fn}','{ln}','{place}','{phone}','{email}','{spec}')")
+for lid, fn, ln, place, phone, email, spec in doctors_data:
+    lid_val = f"'{lid}'" if lid else "null"
+    did = insert(f"INSERT INTO doctor(Login_id, First_Name, Last_Name, Place, Phone, Email, Specialization) VALUES({lid_val},'{fn}','{ln}','{place}','{phone}','{email}','{spec}')")
     doc_ids.append(did)
     print(f"  + Doctor: Dr. {fn} {ln} - {spec} (Doc ID: {did})")
 
