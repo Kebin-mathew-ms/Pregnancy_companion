@@ -1275,21 +1275,27 @@ def get_timeline():
     })
 
 
-from flask import Flask, request, jsonify
 import textwrap
-import google.generativeai as genai
 import json
-from dotenv import load_dotenv
 
-# Load local environment variables from .env
-load_dotenv()
+# Safe optional imports for dotenv and Gemini AI
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    load_dotenv = None
+
+try:
+    import google.generativeai as genai
+except ImportError:
+    genai = None
 
 # Google Gemini API Key - Loaded from environment variables / .env
 GOOGLE_API_KEY = os.environ.get('GEMINI_API_KEY')
 
 # Configure Google Gemini API & Initialize Model Gracefully
 model = None
-if GOOGLE_API_KEY:
+if genai and GOOGLE_API_KEY:
     try:
         genai.configure(api_key=GOOGLE_API_KEY)
         candidate_models = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-flash-latest', 'gemini-2.5-flash', 'gemini-1.5-flash']
