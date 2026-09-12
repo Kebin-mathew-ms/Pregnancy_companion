@@ -119,6 +119,12 @@ body {
   width: 100%;
 }
 
+.form-control option {
+  background-color: #ffffff;
+  color: #1e293b;
+  font-size: 14px;
+}
+
 .form-control:focus {
   outline: none;
   border-color: var(--primary);

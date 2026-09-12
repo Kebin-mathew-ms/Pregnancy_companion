@@ -27,10 +27,12 @@ export default function Register() {
         const response = await fetch('/api/getward')
         if (response.ok) {
           const res = await response.json()
-          if (res.status === 'success' && Array.isArray(res.data)) {
-            setWards(res.data)
-            if (res.data.length > 0) {
-              setFormData(prev => ({ ...prev, wardId: res.data[0].Ward_id }))
+          const wardList = res.data || res.wards || []
+          if (Array.isArray(wardList)) {
+            setWards(wardList)
+            if (wardList.length > 0) {
+              const firstId = wardList[0].Ward_id ?? wardList[0].ward_id ?? wardList[0].id
+              setFormData(prev => ({ ...prev, wardId: firstId }))
             }
           }
         }
@@ -277,9 +279,18 @@ export default function Register() {
                 disabled={loading || success}
                 required
               >
-                {wards.map(w => (
-                  <option key={w.Ward_id} value={w.Ward_id}>{w.Ward_name}</option>
-                ))}
+                <option value="">
+                  {wards.length === 0 ? '-- Loading Wards... --' : '-- Select Local Ward --'}
+                </option>
+                {wards.map(w => {
+                  const id = w.Ward_id ?? w.ward_id ?? w.id;
+                  const name = w.Ward_name ?? w.ward_name ?? w.name ?? `Ward ${id}`;
+                  return (
+                    <option key={id} value={id}>
+                      {name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>

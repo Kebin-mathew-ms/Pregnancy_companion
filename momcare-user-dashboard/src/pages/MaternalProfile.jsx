@@ -302,9 +302,18 @@ export default function MaternalProfile({ user, onProfileUpdate }) {
                   disabled={saving}
                   required
                 >
-                  {wards.map(w => (
-                    <option key={w.Ward_id} value={w.Ward_id}>{w.Ward_name}</option>
-                  ))}
+                  <option value="">
+                    {wards.length === 0 ? '-- Loading Wards... --' : '-- Select Local Ward --'}
+                  </option>
+                  {wards.map(w => {
+                    const id = w.Ward_id ?? w.ward_id ?? w.id;
+                    const name = w.Ward_name ?? w.ward_name ?? w.name ?? `Ward ${id}`;
+                    return (
+                      <option key={id} value={id}>
+                        {name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
