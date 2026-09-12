@@ -3,6 +3,7 @@ import { Calendar, Plus, AlertCircle, ShieldAlert, Heart, Activity } from 'lucid
 
 export default function AppointmentsAndMeds({ user }) {
   const [appointments, setAppointments] = useState([])
+  const [medicalNotes, setMedicalNotes] = useState([])
   const [infoContent, setInfoContent] = useState(null)
   
   // Forms
@@ -31,6 +32,15 @@ export default function AppointmentsAndMeds({ user }) {
         const appJson = await appRes.json()
         if (appJson.status === 'success' && Array.isArray(appJson.appointments)) {
           setAppointments(appJson.appointments)
+        }
+      }
+
+      // Load checkup notes / observations
+      const notesRes = await fetch(`/api/view_appoinments?user_id=${user.user_id}`)
+      if (notesRes.ok) {
+        const notesJson = await notesRes.json()
+        if (notesJson.status === 'success' && Array.isArray(notesJson.data)) {
+          setMedicalNotes(notesJson.data)
         }
       }
 
@@ -309,7 +319,47 @@ export default function AppointmentsAndMeds({ user }) {
             }}>
               No appointment dates tracked yet.
             </div>
-          )}
+          {/* Logged Checkup Notes */}
+          <div style={{ marginTop: '28px' }}>
+            <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '14px', color: 'var(--text-secondary)' }}>
+              Logged Checkup Notes & Clinical Observations
+            </h4>
+            {medicalNotes.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {medicalNotes.map((note, idx) => (
+                  <div key={idx} style={{
+                    padding: '16px 20px',
+                    borderRadius: '16px',
+                    background: 'rgba(255, 255, 255, 0.7)',
+                    border: '1px solid var(--border)'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--primary)' }}>
+                        Checkup Note #{note.Appointment_id || idx + 1}
+                      </span>
+                      {note.Next_appointment_date && (
+                        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                          Next: {new Date(note.Next_appointment_date).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
+                    <p style={{ fontSize: '14px', color: 'var(--text-primary)', margin: 0, lineHeight: 1.5 }}>
+                      {note.Previous_appointment_notes}
+                    </p>
+                    {note.Notifications && (
+                      <div style={{ marginTop: '8px', fontSize: '12px', color: 'var(--secondary)', fontWeight: 600 }}>
+                        Recommendation: {note.Notifications}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
+                No clinical observations logged yet. Click "+ Log Checkup Notes" above to add one.
+              </div>
+            )}
+          </div>
         </section>
 
         {/* Meds & Vaccine Stocks */}
