@@ -46,7 +46,7 @@ export default function ChatAndHelp({ user }) {
               id: d.Doc_id,
               name: `Dr. ${d.First_Name} ${d.Last_Name}`,
               role: d.Specialization || 'Gynaecologist',
-              loginId: d.Doc_id + 100 // Mock separate receiver ID
+              loginId: d.Login_id || d.Doc_id
             }))
           }
         }
