@@ -319,6 +319,8 @@ export default function AppointmentsAndMeds({ user }) {
             }}>
               No appointment dates tracked yet.
             </div>
+          )}
+
           {/* Logged Checkup Notes */}
           <div style={{ marginTop: '28px' }}>
             <h4 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '14px', color: 'var(--text-secondary)' }}>
